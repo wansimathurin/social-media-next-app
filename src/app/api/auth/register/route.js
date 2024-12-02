@@ -29,7 +29,12 @@ export const POST = async (req, res) => {
     try{
         console.log("Received Data", { username, email, password, bio, profile_picture });
         //hash user password
-        const hashedPassword = bcrypt.hashSync(password, 8);
+      const hashedPassword = bcrypt.hashSync(password, 8);
+      //we validate the user data with the model we built
+      const newUser = new User({ username, email, password:hashedPassword, bio, profile_picture });
+      // save the validated user data in the database
+      await newUser.save();
+      // return a response to the request 
          return new NextResponse(
            JSON.stringify({ message: "User created" }),
            {
